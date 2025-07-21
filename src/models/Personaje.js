@@ -11,7 +11,7 @@ class Personaje {
         this.pAgil = pAgil;
         this.nivel = nivel;
         this.exp = exp;
-        this.inventario = []; // 👈 Aquí va el inventario
+        this.inventario = []; 
     }
 
     recibirDmg(cantidad) {
@@ -73,3 +73,5 @@ class Personaje {
         }
     }
 }
+
+module.exports = Personaje;

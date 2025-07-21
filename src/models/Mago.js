@@ -3,7 +3,7 @@ const Habilidad = require('./Habilidad');
 
 class Mago extends Personaje {
     constructor(nombre) {
-        super(nombre, 80, 10, 3); // Menos vida, pero puede causar más daño mágico
+        super(nombre, 80, 10, 3);
         this.tipo = 'Mago';
 
         this.habilidades = [
