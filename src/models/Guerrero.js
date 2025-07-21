@@ -41,7 +41,7 @@ class Guerrero extends Personaje {
                     console.log(`${origen.nombre} usó Corte Giratorio causando ${dmg} de daño a ${objetivo.nombre}`);
                 },
                 3
-            ),
+            ),  
             new Habilidad(
                 'Grito de Guerra',
                 'Aumenta la fuerza del guerrero en +5 por 3 turnos. Requiere nivel 5.',

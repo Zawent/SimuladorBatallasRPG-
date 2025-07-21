@@ -1,6 +1,8 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import Guerrero from './models/Guerrero.js'; 
+import Mago from './models/Mago.js'; 
+import Arquero from './models/Arquero.js'; 
 
 const personajes = [];
 
@@ -80,13 +82,17 @@ function crearPersonaje() {
                 type: 'list',
                 name: 'clase',
                 message: 'Clase del personaje:',
-                choices: ['Guerrero'] 
+                choices: ['Guerrero', 'Mago', 'Arquero'] 
             }
         ])
         .then(res => {
             let nuevoPersonaje;
             if (res.clase === 'Guerrero') {
                 nuevoPersonaje = new Guerrero(res.nombre);
+            }else if (res.clase === 'Mago') {
+                nuevoPersonaje = new Mago(res.nombre);
+            }else if (res.clase === 'Arquero') {
+                nuevoPersonaje = new Arquero(res.nombre);
             }
             personajes.push(nuevoPersonaje);
             console.log(chalk.green(`¡${res.nombre} ha sido creado como ${res.clase}!`));
