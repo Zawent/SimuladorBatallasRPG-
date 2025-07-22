@@ -1,58 +1,59 @@
 [
   {
-    "nombre": "aaaa",
-    "pSalud": 80,
-    "pSaludMaxima": 80,
-    "pFuerza": 10,
-    "pAgil": 3,
+    "nombre": "aaaaa",
+    "pSalud": 120,
+    "pSaludMaxima": 120,
+    "pFuerza": 15,
+    "pAgil": 5,
     "nivel": 1,
     "exp": 0,
     "inventario": [
       {
-        "nombre": "Báculo de Madera",
-        "descripcion": "Aumenta la fuerza del mago en 3."
+        "nombre": "Espada de Hierro",
+        "descripcion": "Aumenta la fuerza del guerrero en 5."
       },
       {
-        "nombre": "Túnica Arcana",
-        "descripcion": "Reduce daño recibido por el mago en 2."
+        "nombre": "Armadura de Cuero",
+        "descripcion": "Aumenta defensa del guerrero en 3."
       },
       {
         "nombre": "Poción de Vida",
         "descripcion": "Restaura 20 puntos de vida."
       },
       {
-        "nombre": "Poción de Fuerza",
-        "descripcion": "Aumenta la fuerza en 5 por 3 turnos."
+        "nombre": "Poción de Vida",
+        "descripcion": "Restaura 20 puntos de vida."
       },
       {
-        "nombre": "Poción de Curación",
-        "tipo": "pocion",
-        "curacion": 30
+        "nombre": "Armadura de Acero",
+        "tipo": "armadura",
+        "defensa": 8
       }
     ],
-    "tipo": "Mago",
+    "tipo": "Guerrero",
     "habilidades": [
       {
-        "nombre": "Bola de Fuego",
-        "descripcion": "Lanza una bola de fuego que causa daño: fuerza + nivel * 2.",
+        "nombre": "Ataque Básico",
+        "descripcion": "Golpe directo con fuerza base + nivel.",
         "nivelMinimo": 1
       },
       {
-        "nombre": "Rayo de Hielo",
-        "descripcion": "Daño base y reduce fuerza del enemigo. Requiere nivel 2.",
-        "nivelMinimo": 2
+        "nombre": "Ataque Fuerte",
+        "descripcion": "Ataque poderoso con 75% de probabilidad de acierto. Daño: fuerza * 2.",
+        "nivelMinimo": 1
       },
       {
-        "nombre": "Escudo Mágico",
-        "descripcion": "Aumenta la defensa en +5 durante 3 turnos. Requiere nivel 3.",
+        "nombre": "Corte Giratorio",
+        "descripcion": "Ataque a todos los enemigos. Requiere nivel 3.",
         "nivelMinimo": 3
       },
       {
-        "nombre": "Tormenta Arcana",
-        "descripcion": "Daño masivo a todos los enemigos. Requiere nivel 5.",
+        "nombre": "Grito de Guerra",
+        "descripcion": "Aumenta la fuerza del guerrero en +5 por 3 turnos. Requiere nivel 5.",
         "nivelMinimo": 5
       }
     ],
+    "vida": 120,
     "experiencia": null
   }
 ]

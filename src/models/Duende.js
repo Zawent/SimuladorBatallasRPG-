@@ -1,7 +1,7 @@
 const Personaje = require('./Personaje');
 const Habilidad = require('./Habilidad');
 const Item = require('./Item');
-const items = require('../data/items'); 
+const items = require('../data/items');
 
 class Goblin extends Personaje {
     constructor(nivel) {
@@ -55,6 +55,12 @@ class Goblin extends Personaje {
         if (this.nivel < habilidad.nivelMinimo) return;
         habilidad.usar(this, objetivo);
     }
+
+    recibirDmg(dmg) {
+        this.vida -= dmg;
+        if (this.vida < 0) this.vida = 0;
+    }
+
 }
 
 module.exports = Goblin;

@@ -75,6 +75,12 @@ class Arquero extends Personaje {
 
         habilidad.usar(this, objetivo);
     }
+    
+    recibirDmg(dmg) {
+        this.vida -= dmg;
+        if (this.vida < 0) this.vida = 0;
+    }
+
 }
 
 module.exports = Arquero;

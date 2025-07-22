@@ -8,7 +8,6 @@ const { calcularDanio, mostrarEstado } = require('../utils/combatUtils');
 async function iniciarCombate() {
     console.log('📦 Cargando personajes...');
     const personajes = cargarPersonajes();
-    console.log('📦 Personajes cargados:', personajes);
 
     if (!personajes || personajes.length === 0) {
         console.log(chalk.red('\n❌ No hay personajes disponibles. Crea uno primero.\n'));
@@ -24,22 +23,22 @@ async function iniciarCombate() {
         }
     ]);
 
-    const jugador = personajes.find(p => p.nombre === nombre);
-    console.log('👤 Personaje seleccionado:', jugador);
+    let jugador = personajes.find(p => p.nombre === nombre);
+
 
     if (!jugador) {
         console.warn('⚠️ No se encontró el personaje seleccionado.');
         return;
     }
 
-    // Validar vida del jugador
-    if (!jugador.vida || jugador.vida <= 0) {
-        jugador.vida = jugador.vidaMax || 100; // Valor por defecto si no existe
-        console.warn(`⚠️ Vida del jugador estaba mal definida. Se asigna: ${jugador.vida}`);
+    // Validar vida
+    if (!jugador.pSalud || jugador.pSalud <= 0) {
+        jugador.pSalud = jugador.pSaludMaxima || 100;
+        console.warn(`⚠️ Vida del jugador estaba mal definida. Se asigna: ${jugador.pSalud}`);
     }
+    jugador.vida = jugador.pSalud;
 
     const enemigo = generarEnemigoAleatorio(jugador.nivel);
-    console.log('👾 Enemigo generado:', enemigo);
 
     if (!enemigo) {
         console.warn('⚠️ El enemigo no fue generado correctamente.');
@@ -47,16 +46,14 @@ async function iniciarCombate() {
     }
 
     enemigo.vida = enemigo.pSalud || enemigo.vida || 100;
-    console.log(`🔧 Vida del enemigo establecida a ${enemigo.vida}`);
-
     console.log(chalk.magentaBright(`\n⚔️ ¡Combate iniciado contra un ${enemigo.tipo || enemigo.nombre} nivel ${enemigo.nivel}!`));
-    console.log('➡️ Estado inicial: jugador:', jugador.vida, '| enemigo:', enemigo.vida);
+    console.log(`➡️ Estado inicial: jugador: ${jugador.vida}/${jugador.pSaludMaxima} | enemigo: ${enemigo.vida}/${enemigo.pSaludMaxima}`);
 
     let turnoJugador = true;
     let contadorTurno = 1;
 
     while (jugador.vida > 0 && enemigo.vida > 0) {
-        console.log(`\n🔁 [Turno ${contadorTurno}] Vida del jugador: ${jugador.vida} | Vida del enemigo: ${enemigo.vida}`);
+        console.log(`\n🔁 [Turno ${contadorTurno}] Vida del jugador: ${jugador.vida}/${jugador.pSaludMaxima} | Vida del enemigo: ${enemigo.vida}/${enemigo.pSaludMaxima}`);
         mostrarEstado(jugador, enemigo);
 
         if (turnoJugador) {
@@ -74,7 +71,7 @@ async function iniciarCombate() {
             if (accion === '⚔️ Atacar') {
                 const habilidadesDisponibles = jugador.habilidades.filter(h => jugador.nivel >= h.nivelMinimo);
 
-                const { habilidadSeleccionada } = await prompt([
+                const { habilidadSeleccionada } = await inquirer.prompt([
                     {
                         type: 'list',
                         name: 'habilidadSeleccionada',
@@ -103,7 +100,6 @@ async function iniciarCombate() {
                     ]);
 
                     const item = jugador.inventario.find(i => i.nombre === itemSeleccionado);
-                    console.log('🧪 Objeto seleccionado:', item);
 
                     if (item) {
                         item.usar(jugador);
@@ -117,25 +113,41 @@ async function iniciarCombate() {
                 try {
                     const dmg = jugador.usarHabilidadEspecial();
                     enemigo.vida -= dmg;
-                    console.log('✨ Daño de habilidad especial:', dmg);
-                    console.log('🩸 Vida del enemigo tras habilidad:', enemigo.vida);
                     console.log(chalk.magenta(`✨ Usaste tu habilidad especial e hiciste ${dmg} de daño.`));
                 } catch (err) {
                     console.log(chalk.red('❌ Error al usar habilidad especial: ' + err.message));
                 }
             }
         } else {
-            const danio = calcularDanio(enemigo, jugador);
-            console.log('💢 Enemigo ataca. Daño:', danio);
-            jugador.vida -= danio;
-            console.log('🩸 Vida del jugador tras recibir daño:', jugador.vida);
-            console.log(chalk.red(`⚔️ ${enemigo.nombre || enemigo.tipo} te atacó e hizo ${danio} de daño.`));
+            const habilidadesDisponibles = enemigo.habilidades?.filter(h => enemigo.nivel >= h.nivelMinimo) || [];
+
+            if (habilidadesDisponibles.length > 0) {
+                const habilidadAleatoria = habilidadesDisponibles[Math.floor(Math.random() * habilidadesDisponibles.length)];
+
+                try {
+                    if (typeof enemigo.usarHabilidad === 'function') {
+                        const indice = enemigo.habilidades.indexOf(habilidadAleatoria);
+                        enemigo.usarHabilidad(indice, jugador);
+                        console.log(chalk.red(`🧟‍♂️ El ${enemigo.nombre || enemigo.tipo} usó ${habilidadAleatoria.nombre} contra ti.`));
+                    } else {
+                        console.log(chalk.yellow('⚠️ El enemigo no tiene método usarHabilidad definido. Se usará ataque básico.'));
+                        const danio = calcularDanio(enemigo, jugador);
+                        jugador.vida -= danio;
+                        console.log(chalk.red(`⚔️ ${enemigo.nombre || enemigo.tipo} te atacó e hizo ${danio} de daño.`));
+                    }
+                } catch (err) {
+                    console.log(chalk.red('❌ Error al usar habilidad enemiga:'), err.message);
+                }
+            } else {
+                const danio = calcularDanio(enemigo, jugador);
+                jugador.vida -= danio;
+                console.log(chalk.red(`⚔️ ${enemigo.nombre || enemigo.tipo} te atacó e hizo ${danio} de daño.`));
+            }
         }
+
 
         turnoJugador = !turnoJugador;
         contadorTurno++;
-        console.log('🔄 Cambio de turno. Siguiente turno es del:', turnoJugador ? 'Jugador' : 'Enemigo');
-
         await new Promise(res => setTimeout(res, 500));
     }
 
@@ -157,8 +169,8 @@ async function iniciarCombate() {
         }
     }
 
-    jugador.vida = jugador.vidaMax;
-    console.log('🛌 Vida del jugador restaurada a:', jugador.vidaMax);
+    jugador.vida = jugador.pSaludMaxima;
+    console.log('🛌 Vida del jugador restaurada a:', jugador.pSaludMaxima);
     guardarPersonajes(personajes);
     console.log('💾 Personajes guardados correctamente.');
 }
