@@ -1,10 +1,18 @@
 const Personaje = require('./Personaje');
 const Habilidad = require('./Habilidad');
+const items = require('../data/items');
 
 class Arquero extends Personaje {
     constructor(nombre) {
         super(nombre, 100, 12, 4); // Buen balance entre ataque y defensa
         this.tipo = 'Arquero';
+
+        this.inventario = [
+            items.find(i => i.nombre === 'Arco de Roble'),
+            items.find(i => i.nombre === 'Traje de Cazador'),
+            items.find(i => i.nombre === 'Poción de Vida'),
+            items.find(i => i.nombre === 'Poción de Vida')
+        ];
 
         this.habilidades = [
             new Habilidad(

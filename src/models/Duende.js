@@ -1,75 +1,59 @@
 const Personaje = require('./Personaje');
 const Habilidad = require('./Habilidad');
+const Item = require('./Item');
+const items = require('../data/items'); 
 
 class Goblin extends Personaje {
     constructor(nivel) {
-        super('Goblin', 45 + nivel * 4, 12 + nivel, 3 + nivel * 0.5);
-        this.tipo = 'Enemigo';const Personaje = require('./Personaje');
-        const Habilidad = require('./Habilidad');
-        
-        class Goblin extends Personaje {
-            constructor(nivel) {
-                super('Goblin', 45 + nivel * 4, 12 + nivel, 3 + nivel * 0.5);
-                this.tipo = 'Enemigo';
-        
-                this.habilidades = [
-                    new Habilidad(
-                        'Puñalada',
-                        'Un golpe rápido. Daño: fuerza base.',
-                        (origen, objetivo) => {
-                            const dmg = origen.pFuerza;
-                            objetivo.recibirDmg(dmg);
-                            console.log(`${origen.nombre} usó Puñalada causando ${dmg} de daño.`);
-                        },
-                        1
-                    ),
-                    new Habilidad(
-                        'Ataque Sorpresa',
-                        'Ataque doble con probabilidad del 50%. Daño: fuerza * 1.5.',
-                        (origen, objetivo) => {
-                            if (Math.random() < 0.5) {
-                                const dmg = Math.floor(origen.pFuerza * 1.5);
-                                objetivo.recibirDmg(dmg);
-                                console.log(`${origen.nombre} usó Ataque Sorpresa causando ${dmg} de daño.`);
-                            } else {
-                                console.log(`${origen.nombre} falló su Ataque Sorpresa.`);
-                            }
-                        },
-                        2
-                    )
-                ];
-            }
-        }
-        
-        module.exports = Goblin;
-        
+        super(`Goblin Nv${nivel}`, 70, 12, 8);
+        this.tipo = 'Goblin';
 
+        // Habilidades (mismo estilo que Guerrero)
         this.habilidades = [
             new Habilidad(
-                'Puñalada',
-                'Un golpe rápido. Daño: fuerza base.',
+                'Ataque Rápido',
+                'Un ataque veloz que hace poco daño.',
                 (origen, objetivo) => {
-                    const dmg = origen.pFuerza;
+                    const dmg = 10 + origen.nivel;
                     objetivo.recibirDmg(dmg);
-                    console.log(`${origen.nombre} usó Puñalada causando ${dmg} de daño.`);
+                    console.log(`${origen.nombre} usó Ataque Rápido causando ${dmg} de daño a ${objetivo.nombre}`);
                 },
-                1
+                0
             ),
             new Habilidad(
-                'Ataque Sorpresa',
-                'Ataque doble con probabilidad del 50%. Daño: fuerza * 1.5.',
+                'Golpe Bajo',
+                'Un ataque sucio que ignora parte de la defensa.',
                 (origen, objetivo) => {
-                    if (Math.random() < 0.5) {
-                        const dmg = Math.floor(origen.pFuerza * 1.5);
-                        objetivo.recibirDmg(dmg);
-                        console.log(`${origen.nombre} usó Ataque Sorpresa causando ${dmg} de daño.`);
-                    } else {
-                        console.log(`${origen.nombre} falló su Ataque Sorpresa.`);
-                    }
+                    const dmg = 12 + origen.nivel;
+                    objetivo.recibirDmg(dmg);
+                    console.log(`${origen.nombre} usó Golpe Bajo causando ${dmg} de daño a ${objetivo.nombre}`);
                 },
                 2
             )
         ];
+
+        // Obtener ítems predefinidos
+        const pocion = items.find(i => i.nombre === 'Poción de Vida');
+
+        // Crear ítem personalizado si no existe
+        const daga = new Item(`Daga de Goblin`, `Un cuchillo oxidado que inflige ${8 + nivel} de daño.`, p => {
+            p.pFuerza += 8 + nivel;
+            console.log(`${p.nombre} usa la Daga de Goblin.`);
+        });
+
+        // Inventario y equipo
+        this.inventario = [pocion, pocion];
+        this.equipo = {
+            arma: daga,
+            armadura: null
+        };
+    }
+
+    usarHabilidad(index, objetivo) {
+        const habilidad = this.habilidades[index];
+        if (!habilidad) return;
+        if (this.nivel < habilidad.nivelMinimo) return;
+        habilidad.usar(this, objetivo);
     }
 }
 

@@ -1,10 +1,18 @@
 const Personaje = require('./Personaje');
 const Habilidad = require('./Habilidad');
+const items = require('../data/items');
 
 class Guerrero extends Personaje {
     constructor(nombre) {
         super(nombre, 120, 15, 5);
         this.tipo = 'Guerrero';
+
+        this.inventario = [
+            items.find(i => i.nombre === 'Espada de Hierro'),
+            items.find(i => i.nombre === 'Armadura de Cuero'),
+            items.find(i => i.nombre === 'Poción de Vida'),
+            items.find(i => i.nombre === 'Poción de Vida')
+        ];
 
         this.habilidades = [
             new Habilidad(
@@ -41,7 +49,7 @@ class Guerrero extends Personaje {
                     console.log(`${origen.nombre} usó Corte Giratorio causando ${dmg} de daño a ${objetivo.nombre}`);
                 },
                 3
-            ),  
+            ),
             new Habilidad(
                 'Grito de Guerra',
                 'Aumenta la fuerza del guerrero en +5 por 3 turnos. Requiere nivel 5.',

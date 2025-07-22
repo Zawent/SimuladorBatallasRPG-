@@ -1,5 +1,7 @@
-const inquirer = require('inquirer').default;
+const inquirer = require('inquirer');
 const chalk = require('chalk');
+const { iniciarCombate } = require('./combatService');
+
 
 const {
     crearPersonaje,
@@ -109,7 +111,7 @@ async function mostrarMenuPrincipal() {
                 await menuObjetos();
                 break;
             case 'Iniciar aventura':
-                console.log(chalk.magentaBright('\n🧭 ¡Aventura iniciada! (por implementar)\n'));
+                await iniciarCombate();
                 break;
             case 'Salir':
                 continuar = false;

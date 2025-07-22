@@ -1,10 +1,18 @@
 const Personaje = require('./Personaje');
 const Habilidad = require('./Habilidad');
+const items = require('../data/items');
 
 class Mago extends Personaje {
     constructor(nombre) {
         super(nombre, 80, 10, 3);
         this.tipo = 'Mago';
+
+        this.inventario = [
+            items.find(i => i.nombre === 'Báculo de Madera'),
+            items.find(i => i.nombre === 'Túnica Arcana'),
+            items.find(i => i.nombre === 'Poción de Vida'),
+            items.find(i => i.nombre === 'Poción de Fuerza')
+        ];
 
         this.habilidades = [
             new Habilidad(

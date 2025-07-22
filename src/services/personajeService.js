@@ -1,9 +1,9 @@
-const inquirer = require('inquirer').default;
+const inquirer = require('inquirer');
 const chalk = require('chalk');
 const Guerrero = require('../models/Guerrero');
 const Mago = require('../models/Mago');
 const Arquero = require('../models/Arquero');
-const { personajes } = require('../data/personajes'); // fuente compartida
+const { personajes } = require('../data/personajes'); 
 
 async function crearPersonaje() {
     const { nombre } = await inquirer.prompt([
@@ -103,9 +103,25 @@ async function verInventario() {
     }
 }
 
+function cargarPersonajes() {
+    return personajes;
+}
+
+const fs = require('fs');
+const path = require('path');
+
+const PERSONAJES_FILE = path.join(__dirname, '../data/personajes.json');
+
+function guardarPersonajes(personajes) {
+    fs.writeFileSync(PERSONAJES_FILE, JSON.stringify(personajes, null, 2), 'utf-8');
+}
+
+
 module.exports = {
     crearPersonaje,
     listarPersonajes,
     eliminarPersonaje,
-    verInventario
+    verInventario,
+    cargarPersonajes,
+    guardarPersonajes
 };
