@@ -62,7 +62,7 @@ async function iniciarCombate() {
                     type: 'list',
                     name: 'accion',
                     message: chalk.yellow('¿Qué deseas hacer?'),
-                    choices: ['⚔️ Atacar', '🧪 Usar objeto', '✨ Habilidad especial']
+                    choices: ['⚔️ Atacar', '🧪 Usar objeto', '🏃‍♂️ Huir del combate']
                 }
             ]);
 
@@ -109,13 +109,14 @@ async function iniciarCombate() {
                 }
             }
 
-            else if (accion === '✨ Habilidad especial') {
-                try {
-                    const dmg = jugador.usarHabilidadEspecial();
-                    enemigo.vida -= dmg;
-                    console.log(chalk.magenta(`✨ Usaste tu habilidad especial e hiciste ${dmg} de daño.`));
-                } catch (err) {
-                    console.log(chalk.red('❌ Error al usar habilidad especial: ' + err.message));
+            else if (accion === '🏃‍♂️ Huir del combate') {
+                const chance = Math.random();
+            
+                if (chance < 0.5) {
+                    console.log(chalk.green.bold('\n🏃‍♂️ ¡Lograste huir exitosamente del combate!\n'));
+                    return;
+                } else {
+                    console.log(chalk.red.bold('\n🚫 No pudiste huir. ¡El combate continúa!\n'));
                 }
             }
         } else {

@@ -1,6 +1,6 @@
 [
   {
-    "nombre": "aaaaa",
+    "nombre": "",
     "pSalud": 120,
     "pSaludMaxima": 120,
     "pFuerza": 15,
@@ -8,14 +8,6 @@
     "nivel": 1,
     "exp": 0,
     "inventario": [
-      {
-        "nombre": "Espada de Hierro",
-        "descripcion": "Aumenta la fuerza del guerrero en 5."
-      },
-      {
-        "nombre": "Armadura de Cuero",
-        "descripcion": "Aumenta defensa del guerrero en 3."
-      },
       {
         "nombre": "Poción de Vida",
         "descripcion": "Restaura 20 puntos de vida."

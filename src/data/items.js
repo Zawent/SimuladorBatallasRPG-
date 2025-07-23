@@ -15,7 +15,7 @@ const items = [
         if (personaje.clase === 'Guerrero') {
             personaje.pFuerza += 5;
             console.log(`${personaje.nombre} empuñó la Espada de Hierro.`);
-        }a
+        }
     }),
     new Item('Arco de Roble', 'Aumenta la fuerza del arquero en 4.', personaje => {
         if (personaje.clase === 'Arquero') {
